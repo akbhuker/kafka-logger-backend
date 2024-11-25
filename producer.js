@@ -1,6 +1,7 @@
 const { Kafka } = require('kafkajs');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 const kafka = new Kafka({
     clientId: 'log-producer',
@@ -10,6 +11,9 @@ const kafka = new Kafka({
 const producer = kafka.producer();
 
 app.use(express.json());
+
+
+app.use(cors());
 
 // Initialize producer
 async function initProducer() {

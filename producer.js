@@ -1,24 +1,19 @@
-const { Kafka } = require('kafkajs');
+const { kafka } = require("./client");
 const express = require('express');
 const app = express();
 const cors = require('cors');
 
-const kafka = new Kafka({
-    clientId: 'log-producer',
-    brokers: ['localhost:9092']
-});
+app.use(express.json());
+app.use(cors());
 
 const producer = kafka.producer();
 
-app.use(express.json());
-
-
-app.use(cors());
-
 // Initialize producer
 async function initProducer() {
+    console.log("Connecting Producer");
+
     await producer.connect();
-    console.log('Producer connected');
+    console.log("Producer Connected Successfully");
 }
 
 // API endpoint to receive logs

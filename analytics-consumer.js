@@ -1,9 +1,4 @@
-const { Kafka } = require('kafkajs');
-
-const kafka = new Kafka({
-    clientId: 'analytics-consumer',
-    brokers: ['localhost:9092']
-});
+const { kafka } = require("./client");
 
 const consumer = kafka.consumer({ groupId: 'analytics-group' });
 

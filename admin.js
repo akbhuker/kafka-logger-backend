@@ -6,7 +6,7 @@ async function init() {
     admin.connect();
     console.log("Adming Connection Success...");
 
-    console.log("Creating Topic [rider-updates]");
+    console.log("Creating Topic");
     await admin.createTopics({
         topics: [
             {

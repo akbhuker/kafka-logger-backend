@@ -130,13 +130,15 @@ app.post('/logs', async (req, res) => {
             timestamp: new Date().toISOString()
         };
 
-        await producer.send({
-            topic: 'logs',
-            messages: [{
-                key: service,
-                value: JSON.stringify(logMessage)
-            }]
-        });
+        if (process.env.KAFKA_STATUS === 'ACTIVE') {
+            await producer.send({
+                topic: 'logs',
+                messages: [{
+                    key: service,
+                    value: JSON.stringify(logMessage)
+                }]
+            });
+        }
 
         // Optional: Also emit directly if needed
         if (io) {
@@ -147,6 +149,7 @@ app.post('/logs', async (req, res) => {
             status: 'Log sent successfully',
             log: logMessage
         });
+
     } catch (error) {
         handleError('Log Endpoint', error);
         res.status(500).json({
@@ -171,6 +174,9 @@ const PORT = process.env.PORT || 4000;
 
 server.listen(PORT, async () => {
     console.log(`Server running on port ${PORT}`);
-    await initProducer();
-    await runKafkaConsumer();
+    if (process.env.KAFKA_STATUS === 'ACTIVE') {
+        await initProducer();
+        await runKafkaConsumer();
+    }
+
 });
